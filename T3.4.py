@@ -12,8 +12,8 @@ win = 0
 loose = 0
 
 for i in range(repeat):
-    car = random.randrange(0,2)
-    pick = random.randrange(0,2)
+    car = random.randrange(0,3)
+    pick = random.randrange(0,3)
     
     if (car == pick):
         win += 1
@@ -28,8 +28,8 @@ win = 0
 loose = 0
 
 for i in range(repeat):
-    car = random.randrange(0,2)
-    pick = random.randrange(0,2)
+    car = random.randrange(0,3)
+    pick = random.randrange(0,3)
     #print("Car Door", car)
     #print("Picked Door", pick)
 
