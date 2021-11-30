@@ -9,7 +9,6 @@ import math
 import sys
 import numpy as np
 
-
 def read_commandline():
     convarray = np.empty(0)
     fobj = open(sys.argv[1], 'r')
@@ -18,7 +17,6 @@ def read_commandline():
         iniarray = line.split()
         newarray = np.array(iniarray)
         for x in newarray:
-            print(x)
             test = x
             test = test.replace('.', '', 1)
             test = test.replace('-','',2)
@@ -34,26 +32,16 @@ def read_commandline():
             convarray = newarray.astype(float)
             log_add(convarray)
         print(convarray)
-        
-        
-
-
   
-def log_add(array):
-# =============================================================================
-#     
-#     log_result = 0
-#     for i in range(array.size()):
-#         p = array[i]
-#         q = array[i+1]
-#      ## Default is e, i like that
-#         p1 = math.log(p)
-#         q1 = math.log(q)
-#         r = p*q
-#         r1 = math.log(r)
-#     i+=1
-#     return log_result
-# =============================================================================
- 
+def log_add(array: np.array) -> np.array:
+    addition = 0
+    size = np.size(array)
+    log_array = math.log(array)
+    print(array)
+    print(log_array)
+        # add i on i+1 and safe 
+        #addition += p1 + log(1+(np.exp(q1-p1)))     
+    return 0
+
 
 read_commandline()
