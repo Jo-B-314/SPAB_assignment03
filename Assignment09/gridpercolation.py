@@ -5,13 +5,32 @@ import sys
 # =============================================================================
 # percolation algorithm based on
 #  https://www.geeksforgeeks.org/find-whether-path-two-cells-matrix/
-# - yellow is the table cloth
-# - black is some for liquids unpassable embroidery
-# - brown is (obviously) coffee
+# - brown is the table cloth
+# - yellow is some for liquids unpassable embroidery
+# - black is (obviously) coffee
+# Coffee is trying to percolate from left to right
+# =============================================================================
+
+# =============================================================================
+# It is absolutely possible to run this with matplotlib-lines activated but
+# make sure you have some time ^^
+# =============================================================================
+
+# =============================================================================
+# Output for n = 100 and T = 100 and p = 0.01,0.02,...0.99
+#[ 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+#  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+#  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+#  0.  0.  0.  0.  0.  0.  0.  0.  2. 27. 50. 63. 56. 65. 56. 64. 60. 75.
+# 69. 75. 67. 69. 72. 77. 79. 91. 83. 76. 76. 81. 83. 82. 83. 89. 83. 90.
+# 91. 89. 90. 94. 98. 97. 96. 96. 99. 99.]
+# These are the amounts how often the tea can percolate all the way through in
+# 100 tries.
+# So the upper threshold would be 0.98 and the lower threshold would be 0.6.
 # =============================================================================
 
 n = 1000
-p = 0.6
+#p = 0.6
 
 #path_count = 0
 
@@ -20,7 +39,6 @@ np.random.seed(0)
 flag = False
 
 def percolate(matrix,n):
-    #flag = False
     # starting at random 1 in matrix at the upside border
     i = np.random.randint(n)
     counter = 0
@@ -70,21 +88,16 @@ def checkPath(matrix,i,j):
     # if space not percolatable
     else:
         return False
-          
-#   0: closed edge: yellow
-#   1: open edge: brown
-#   2: percolated coffee
-# Try to walk from left to right
 
 
 #plt.rcParams["figure.figsize"] = [7.00, 3.50]
 #plt.rcParams["figure.autolayout"] = True
 
 
-result_matrix = np.zeros(20)
+result_matrix = np.zeros(100)
 
 i = 0
-for p in np.arange(0,1,0.05):
+for p in np.arange(0,1,0.01):
     path_count = 0
     for run in range(100):
         print("_________________________")
