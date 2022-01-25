@@ -6,13 +6,14 @@ Created on Tue Jan 25 12:14:33 2022
 """
 
 
-# As seen from Jake Vanderplas <jakevdp@cs.washington.edu> on 
-# https://scikit-learn.org/stable/auto_examples/neighbors/plot_kde_1d.html
 # Sources
 # https://github.com/scikit-learn/scikit-learn/blob/main/sklearn/neighbors/_kde.py
+# https://stackabuse.com/kernel-density-estimation-in-python-using-scikit-learn/
+# https://scikit-learn.org/stable/auto_examples/neighbors/plot_kde_1d.html
+# https://het.as.utexas.edu/HET/Software/Scipy/generated/scipy.stats.gaussian_kde.html
+# https://github.com/scipy/scipy/issues/6176
 
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 from sklearn.neighbors import KernelDensity
@@ -32,6 +33,7 @@ from sklearn.neighbors import KernelDensity
 # =============================================================================
 
 N = 50
+h = 0.5
 X =[[-3.4], [-3.21], [-2.47], [-2.45], [-2.44], [-1.9], [-1.72],
                 [-1.65], [-1.43],[-1.03], [-0.97], [-0.61], [-0.59], [-0.05],
                 [0.39], [0.42], [0.42], [0.47], [0.47],[0.52], [0.58], [0.66],
@@ -49,7 +51,7 @@ ax.fill(X_plot[:, 0], true_dens, fc="black", alpha=0.2, label="input distributio
 lw = 2
 
 
-kde = KernelDensity(kernel='epanechnikov', bandwidth=0.5).fit(X)
+kde = KernelDensity(kernel='epanechnikov', bandwidth=h).fit(X)
 log_dens = kde.score_samples(X_plot)
 ax.plot(
     X_plot[:, 0],
@@ -67,3 +69,41 @@ ax.legend(loc="upper right")
 ax.set_xlim(-5, 6)
 ax.set_ylim(-0.02, 0.6)
 plt.show()
+
+#----------------------------------------------------------- BONUS
+# For Cross Validation we use the sklearn function GridSearchCrossValidation.
+# It takes different bandwith parameters and returns the maximized log-
+# likelihood of data
+
+from sklearn.model_selection import GridSearchCV
+
+h = np.arange(0.05,2,0.05)
+
+fig, ax = plt.subplots(nrows=2, ncols=3, figsize=(10, 7))
+plt_ind = np.arange(6) + 231
+
+for b, ind in zip(h, plt_ind):
+    kde_model = KernelDensity(kernel='epanechnikov', bandwidth=b)
+    kde_model.fit(X)
+    score = kde_model.score_samples(X_plot)
+    plt.subplot(ind)
+    plt.fill(X_plot, np.exp(score), c='green')
+    plt.title("h="+str(b))
+
+fig.subplots_adjust(hspace=0.5, wspace=.3)
+fig.suptitle("Effect of bandwidth on Estimation")
+plt.show()
+
+
+kde = KernelDensity(kernel='epanechnikov').fit(X)
+grid = GridSearchCV(kde,{'bandwidth': h})
+grid.fit(X)
+kde = grid.best_estimator_
+log_dens = kde.score_samples(X)
+plt.fill(X, np.exp(log_dens), c='green')
+plt.title('Optimal estimate with Epanechnikov kernel')
+plt.show()
+print("optimal bandwidth: " + "{:.2f}".format(kde.bandwidth))
+
+
+
